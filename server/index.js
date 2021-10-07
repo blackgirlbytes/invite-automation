@@ -114,7 +114,7 @@ async function checkForEmployee(user) {
 
 async function openIssue() {
     const {status} = await octokit.request('POST /repos/{owner}/{repo}/issues', {
-      owner: 'octocat',
+      owner: 'maintainers',
       repo: 'invite-automation',
       title: 'Add user to team',
       body: 'Should we add this user to the repo?',
