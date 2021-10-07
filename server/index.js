@@ -103,11 +103,33 @@ async function checkForEmployee(user) {
 
   if (status === 404) {
     console.log("user is not an employee", status);
+    // create an issue
+    openIssue()
+    console.log("created an issue")
   }
 
   return false;
 }
 
+
+async function openIssue() {
+    const {status} = await octokit.request('POST /repos/{owner}/{repo}/issues', {
+      owner: 'octocat',
+      repo: 'invite-automation',
+      title: 'Add user to team',
+      body: 'Should we add this user to the repo?',
+    }).catch(err => { console.log(err) });
+
+    if (status === 201) {
+      console.log("opened an issue", status);
+    }
+    if (status === 403) {
+      console.log("Forbidden", status);
+    }
+    if (status === 422) {
+      console.log("Unprocessable Entity", status);
+    }
+}
 async function addUserToTeam(user, team, employeeStatus) {
   const team_slug = employeeStatus ? 'github-employees' : 'members';
   const {status} = await octokit.request('PUT /orgs/{org}/teams/{team_slug}/memberships/{username}', {
